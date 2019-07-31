@@ -145,6 +145,8 @@ export default class ImageMapper extends Component {
 					onMouseEnter={this.hoverOn.bind(this, extendedArea, index)}
 					onMouseLeave={this.hoverOff.bind(this, extendedArea, index)}
 					onMouseMove={this.props.onMouseMove.bind(this, extendedArea, index)}
+					onMouseDown={this.props.onMouseDown.bind(this, extendedArea, index)}
+					onMouseUp={this.props.onMouseUp.bind(this, extendedArea, index)}
 					onClick={this.click.bind(this, extendedArea, index)} href={area.href} />
 			);
 		});
@@ -156,7 +158,9 @@ export default class ImageMapper extends Component {
 				<img style={this.styles.img} src={this.props.src} useMap={`#${this.props.map.name}`} alt=""
 					 ref={node => this.img = node} onLoad={this.initCanvas}
 					 onClick={this.props.onImageClick}
-					 onMouseMove={this.props.onImageMouseMove}/>
+					 onMouseMove={this.props.onImageMouseMove}
+					 onMouseDown={this.props.onImageMouseDown}
+					 onMouseUp={this.props.onImageMouseUp}/>
 				<canvas ref={node => this.canvas = node} style={this.styles.canvas} />
 				<map name={this.props.map.name} style={this.styles.map}>{ this.renderAreas() }</map>
 				{this.props.children}
@@ -196,8 +200,12 @@ ImageMapper.propTypes = {
 	}),
 	onClick: PropTypes.func,
 	onMouseMove: PropTypes.func,
+	onMouseDown: PropTypes.func,
+	onMouseUp: PropTypes.func,
 	onImageClick: PropTypes.func,
 	onImageMouseMove: PropTypes.func,
+	onImageMouseDown: PropTypes.func,
+	onImageMouseUp: PropTypes.func,
 	onLoad: PropTypes.func,
 	onMouseEnter: PropTypes.func,
 	onMouseLeave: PropTypes.func,
