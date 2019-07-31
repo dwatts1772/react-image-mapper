@@ -159,6 +159,7 @@ export default class ImageMapper extends Component {
 					 onMouseMove={this.props.onImageMouseMove}/>
 				<canvas ref={node => this.canvas = node} style={this.styles.canvas} />
 				<map name={this.props.map.name} style={this.styles.map}>{ this.renderAreas() }</map>
+				{this.props.children}
 			</div>
 		);
 	}
@@ -203,4 +204,5 @@ ImageMapper.propTypes = {
 	src: PropTypes.string.isRequired,
 	strokeColor: PropTypes.string,
 	width: PropTypes.number,
+	children: PropTypes.node,
 };
