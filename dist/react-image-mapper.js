@@ -1172,7 +1172,7 @@ module.exports = function exportedEqual(a, b) {
 
 },{}],9:[function(require,module,exports){
 (function (process){
-/** @license React v16.8.6
+/** @license React v16.9.0
  * react-is.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -1202,17 +1202,22 @@ var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for('react.strict_mode') : 0xeac
 var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for('react.profiler') : 0xead2;
 var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for('react.provider') : 0xeacd;
 var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for('react.context') : 0xeace;
+// TODO: We don't use AsyncMode or ConcurrentMode anymore. They were temporary
+// (unstable) APIs that have been removed. Can we remove the symbols?
 var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for('react.async_mode') : 0xeacf;
 var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for('react.concurrent_mode') : 0xeacf;
 var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for('react.forward_ref') : 0xead0;
 var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for('react.suspense') : 0xead1;
+var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for('react.suspense_list') : 0xead8;
 var REACT_MEMO_TYPE = hasSymbol ? Symbol.for('react.memo') : 0xead3;
 var REACT_LAZY_TYPE = hasSymbol ? Symbol.for('react.lazy') : 0xead4;
+var REACT_FUNDAMENTAL_TYPE = hasSymbol ? Symbol.for('react.fundamental') : 0xead5;
+var REACT_RESPONDER_TYPE = hasSymbol ? Symbol.for('react.responder') : 0xead6;
 
 function isValidElementType(type) {
   return typeof type === 'string' || typeof type === 'function' ||
   // Note: its typeof might be other than 'symbol' or 'number' if it's a polyfill.
-  type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || typeof type === 'object' && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE);
+  type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || typeof type === 'object' && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_RESPONDER_TYPE);
 }
 
 /**
@@ -1402,7 +1407,7 @@ exports.isSuspense = isSuspense;
 
 }).call(this,require('_process'))
 },{"_process":2}],10:[function(require,module,exports){
-/** @license React v16.8.6
+/** @license React v16.9.0
  * react-is.production.min.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
@@ -1412,11 +1417,11 @@ exports.isSuspense = isSuspense;
  */
 
 'use strict';Object.defineProperty(exports,"__esModule",{value:!0});
-var b="function"===typeof Symbol&&Symbol.for,c=b?Symbol.for("react.element"):60103,d=b?Symbol.for("react.portal"):60106,e=b?Symbol.for("react.fragment"):60107,f=b?Symbol.for("react.strict_mode"):60108,g=b?Symbol.for("react.profiler"):60114,h=b?Symbol.for("react.provider"):60109,k=b?Symbol.for("react.context"):60110,l=b?Symbol.for("react.async_mode"):60111,m=b?Symbol.for("react.concurrent_mode"):60111,n=b?Symbol.for("react.forward_ref"):60112,p=b?Symbol.for("react.suspense"):60113,q=b?Symbol.for("react.memo"):
-60115,r=b?Symbol.for("react.lazy"):60116;function t(a){if("object"===typeof a&&null!==a){var u=a.$$typeof;switch(u){case c:switch(a=a.type,a){case l:case m:case e:case g:case f:case p:return a;default:switch(a=a&&a.$$typeof,a){case k:case n:case h:return a;default:return u}}case r:case q:case d:return u}}}function v(a){return t(a)===m}exports.typeOf=t;exports.AsyncMode=l;exports.ConcurrentMode=m;exports.ContextConsumer=k;exports.ContextProvider=h;exports.Element=c;exports.ForwardRef=n;
-exports.Fragment=e;exports.Lazy=r;exports.Memo=q;exports.Portal=d;exports.Profiler=g;exports.StrictMode=f;exports.Suspense=p;exports.isValidElementType=function(a){return"string"===typeof a||"function"===typeof a||a===e||a===m||a===g||a===f||a===p||"object"===typeof a&&null!==a&&(a.$$typeof===r||a.$$typeof===q||a.$$typeof===h||a.$$typeof===k||a.$$typeof===n)};exports.isAsyncMode=function(a){return v(a)||t(a)===l};exports.isConcurrentMode=v;exports.isContextConsumer=function(a){return t(a)===k};
-exports.isContextProvider=function(a){return t(a)===h};exports.isElement=function(a){return"object"===typeof a&&null!==a&&a.$$typeof===c};exports.isForwardRef=function(a){return t(a)===n};exports.isFragment=function(a){return t(a)===e};exports.isLazy=function(a){return t(a)===r};exports.isMemo=function(a){return t(a)===q};exports.isPortal=function(a){return t(a)===d};exports.isProfiler=function(a){return t(a)===g};exports.isStrictMode=function(a){return t(a)===f};
-exports.isSuspense=function(a){return t(a)===p};
+var b="function"===typeof Symbol&&Symbol.for,c=b?Symbol.for("react.element"):60103,d=b?Symbol.for("react.portal"):60106,e=b?Symbol.for("react.fragment"):60107,f=b?Symbol.for("react.strict_mode"):60108,g=b?Symbol.for("react.profiler"):60114,h=b?Symbol.for("react.provider"):60109,k=b?Symbol.for("react.context"):60110,l=b?Symbol.for("react.async_mode"):60111,m=b?Symbol.for("react.concurrent_mode"):60111,n=b?Symbol.for("react.forward_ref"):60112,p=b?Symbol.for("react.suspense"):60113,q=b?Symbol.for("react.suspense_list"):
+60120,r=b?Symbol.for("react.memo"):60115,t=b?Symbol.for("react.lazy"):60116,v=b?Symbol.for("react.fundamental"):60117,w=b?Symbol.for("react.responder"):60118;function x(a){if("object"===typeof a&&null!==a){var u=a.$$typeof;switch(u){case c:switch(a=a.type,a){case l:case m:case e:case g:case f:case p:return a;default:switch(a=a&&a.$$typeof,a){case k:case n:case h:return a;default:return u}}case t:case r:case d:return u}}}function y(a){return x(a)===m}exports.typeOf=x;exports.AsyncMode=l;
+exports.ConcurrentMode=m;exports.ContextConsumer=k;exports.ContextProvider=h;exports.Element=c;exports.ForwardRef=n;exports.Fragment=e;exports.Lazy=t;exports.Memo=r;exports.Portal=d;exports.Profiler=g;exports.StrictMode=f;exports.Suspense=p;
+exports.isValidElementType=function(a){return"string"===typeof a||"function"===typeof a||a===e||a===m||a===g||a===f||a===p||a===q||"object"===typeof a&&null!==a&&(a.$$typeof===t||a.$$typeof===r||a.$$typeof===h||a.$$typeof===k||a.$$typeof===n||a.$$typeof===v||a.$$typeof===w)};exports.isAsyncMode=function(a){return y(a)||x(a)===l};exports.isConcurrentMode=y;exports.isContextConsumer=function(a){return x(a)===k};exports.isContextProvider=function(a){return x(a)===h};
+exports.isElement=function(a){return"object"===typeof a&&null!==a&&a.$$typeof===c};exports.isForwardRef=function(a){return x(a)===n};exports.isFragment=function(a){return x(a)===e};exports.isLazy=function(a){return x(a)===t};exports.isMemo=function(a){return x(a)===r};exports.isPortal=function(a){return x(a)===d};exports.isProfiler=function(a){return x(a)===g};exports.isStrictMode=function(a){return x(a)===f};exports.isSuspense=function(a){return x(a)===p};
 
 },{}],11:[function(require,module,exports){
 (function (process){
@@ -1439,11 +1444,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _slicedToArray = (function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; })();
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
@@ -1474,18 +1479,20 @@ var ImageMapper = (function (_Component) {
 		_classCallCheck(this, ImageMapper);
 
 		_get(Object.getPrototypeOf(ImageMapper.prototype), "constructor", this).call(this, props);
-		["drawrect", "drawcircle", "drawpoly", "initCanvas", "renderPrefilledAreas"].forEach(function (f) {
+		["drawrect", "drawcircle", "drawpoly", "initCanvases", "renderPrefilledAreas"].forEach(function (f) {
 			return _this[f] = _this[f].bind(_this);
 		});
 		var absPos = { position: "absolute", top: 0, left: 0 };
+		var canvas = _extends({}, absPos, { pointerEvents: "none" });
 		this.styles = {
 			container: { position: "relative" },
-			canvas: _extends({}, absPos, { pointerEvents: "none", zIndex: 2 }),
+			hoverCanvas: _extends({}, canvas, { zIndex: 3 }),
+			prefillCanvas: _extends({}, canvas, { zIndex: 2 }),
 			img: _extends({}, absPos, { zIndex: 1, userSelect: "none" }),
 			map: props.onClick && { cursor: "pointer" } || undefined
 		};
 		// Props watched for changes to trigger update
-		this.watchedProps = ["active", "fillColor", "height", "imgWidth", "lineWidth", "src", "strokeColor", "width"];
+		this.watchedProps = ["active", "fillColor", "height", "imgWidth", "lineWidth", "src", "strokeColor", "width", "renderChildren"];
 	}
 
 	_createClass(ImageMapper, [{
@@ -1496,27 +1503,28 @@ var ImageMapper = (function (_Component) {
 			var propChanged = this.watchedProps.some(function (prop) {
 				return _this2.props[prop] !== nextProps[prop];
 			});
-			return !(0, _reactFastCompare2["default"])(this.props.map, this.state.map) || propChanged;
+			var result = !(0, _reactFastCompare2["default"])(this.props.map, this.state.map) || propChanged;
+			return result;
 		}
 	}, {
-		key: "componentWillMount",
-		value: function componentWillMount() {
+		key: "UNSAFE_componentWillMount",
+		value: function UNSAFE_componentWillMount() {
 			this.updateCacheMap();
 		}
 	}, {
 		key: "updateCacheMap",
 		value: function updateCacheMap() {
-			this.setState({ map: JSON.parse(JSON.stringify(this.props.map)) }, this.initCanvas);
+			this.setState({ map: _extends({}, this.props.map) }, this.initCanvases);
 		}
 	}, {
 		key: "componentDidUpdate",
 		value: function componentDidUpdate() {
 			this.updateCacheMap();
-			this.initCanvas();
+			this.initCanvases();
 		}
 	}, {
 		key: "drawrect",
-		value: function drawrect(coords, fillColor, lineWidth, strokeColor) {
+		value: function drawrect(coords, fillColor, lineWidth, strokeColor, context) {
 			var _coords = _slicedToArray(coords, 4);
 
 			var left = _coords[0];
@@ -1524,63 +1532,68 @@ var ImageMapper = (function (_Component) {
 			var right = _coords[2];
 			var bot = _coords[3];
 
-			this.ctx.fillStyle = fillColor;
-			this.ctx.lineWidth = lineWidth;
-			this.ctx.strokeStyle = strokeColor;
-			this.ctx.strokeRect(left, top, right - left, bot - top);
-			this.ctx.fillRect(left, top, right - left, bot - top);
-			this.ctx.fillStyle = this.props.fillColor;
+			context.fillStyle = fillColor;
+			context.lineWidth = lineWidth;
+			context.strokeStyle = strokeColor;
+			context.strokeRect(left, top, right - left, bot - top);
+			context.fillRect(left, top, right - left, bot - top);
+			context.fillStyle = this.props.fillColor;
 		}
 	}, {
 		key: "drawcircle",
-		value: function drawcircle(coords, fillColor, lineWidth, strokeColor) {
-			this.ctx.fillStyle = fillColor;
-			this.ctx.beginPath();
-			this.ctx.lineWidth = lineWidth;
-			this.ctx.strokeStyle = strokeColor;
-			this.ctx.arc(coords[0], coords[1], coords[2], 0, 2 * Math.PI);
-			this.ctx.closePath();
-			this.ctx.stroke();
-			this.ctx.fill();
-			this.ctx.fillStyle = this.props.fillColor;
+		value: function drawcircle(coords, fillColor, lineWidth, strokeColor, context) {
+			context.fillStyle = fillColor;
+			context.beginPath();
+			context.lineWidth = lineWidth;
+			context.strokeStyle = strokeColor;
+			context.arc(coords[0], coords[1], coords[2], 0, 2 * Math.PI);
+			context.closePath();
+			context.stroke();
+			context.fill();
+			context.fillStyle = this.props.fillColor;
 		}
 	}, {
 		key: "drawpoly",
-		value: function drawpoly(coords, fillColor, lineWidth, strokeColor) {
-			var _this3 = this;
-
+		value: function drawpoly(coords, fillColor, lineWidth, strokeColor, context) {
+			coords = coords.map(function (coord) {
+				return Math.floor(coord);
+			});
 			coords = coords.reduce(function (a, v, i, s) {
 				return i % 2 ? a : [].concat(_toConsumableArray(a), [s.slice(i, i + 2)]);
 			}, []);
 
-			this.ctx.fillStyle = fillColor;
-			this.ctx.beginPath();
-			this.ctx.lineWidth = lineWidth;
-			this.ctx.strokeStyle = strokeColor;
+			context.fillStyle = fillColor;
+			context.beginPath();
+			context.lineWidth = lineWidth;
+			context.strokeStyle = strokeColor;
 			var first = coords.unshift();
-			this.ctx.moveTo(first[0], first[1]);
+			context.moveTo(first[0], first[1]);
 			coords.forEach(function (c) {
-				return _this3.ctx.lineTo(c[0], c[1]);
+				return context.lineTo(c[0], c[1]);
 			});
-			this.ctx.closePath();
-			this.ctx.stroke();
-			this.ctx.fill();
-			this.ctx.fillStyle = this.props.fillColor;
+			context.closePath();
+			context.stroke();
+			context.fill();
+			context.fillStyle = this.props.fillColor;
 		}
 	}, {
-		key: "initCanvas",
-		value: function initCanvas() {
+		key: "initCanvases",
+		value: function initCanvases() {
 			if (this.props.width) this.img.width = this.props.width;
 
 			if (this.props.height) this.img.height = this.props.height;
 
-			this.canvas.width = this.props.width || this.img.clientWidth;
-			this.canvas.height = this.props.height || this.img.clientHeight;
+			this.prefillCanvas.width = this.props.width || this.img.clientWidth;
+			this.prefillCanvas.height = this.props.height || this.img.clientHeight;
+			this.hoverCanvas.width = this.props.width || this.img.clientWidth;
+			this.hoverCanvas.height = this.props.height || this.img.clientHeight;
 			this.container.style.width = (this.props.width || this.img.clientWidth) + "px";
 			this.container.style.height = (this.props.height || this.img.clientHeight) + "px";
-			this.ctx = this.canvas.getContext("2d");
-			this.ctx.fillStyle = this.props.fillColor;
-			//this.ctx.strokeStyle = this.props.strokeColor;
+			this.prefillCtx = this.prefillCanvas.getContext("2d");
+			this.prefillCtx.fillStyle = this.props.fillColor;
+			this.hoverCtx = this.hoverCanvas.getContext("2d");
+			this.hoverCtx.fillStyle = this.props.fillColor;
+			//this.prefillCtx.strokeStyle = this.props.strokeColor;
 
 			if (this.props.onLoad) this.props.onLoad();
 
@@ -1592,17 +1605,15 @@ var ImageMapper = (function (_Component) {
 			var shape = event.target.getAttribute("shape");
 
 			if (this.props.active && this["draw" + shape]) {
-				this["draw" + shape](event.target.getAttribute("coords").split(","), area.fillColor, area.lineWidth || this.props.lineWidth, area.strokeColor || this.props.strokeColor);
+				this["draw" + shape](event.target.getAttribute("coords").split(","), area.fillColor, area.lineWidth || this.props.lineWidth, area.strokeColor || this.props.strokeColor, this.hoverCtx);
 			}
+
 			if (this.props.onMouseEnter) this.props.onMouseEnter(area, index, event);
 		}
 	}, {
 		key: "hoverOff",
 		value: function hoverOff(area, index, event) {
-			if (this.props.active) {
-				this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-				this.renderPrefilledAreas();
-			}
+			if (this.props.active) this.hoverCtx.clearRect(0, 0, this.hoverCanvas.width, this.hoverCanvas.height);
 
 			if (this.props.onMouseLeave) this.props.onMouseLeave(area, index, event);
 		}
@@ -1680,11 +1691,11 @@ var ImageMapper = (function (_Component) {
 	}, {
 		key: "renderPrefilledAreas",
 		value: function renderPrefilledAreas() {
-			var _this4 = this;
+			var _this3 = this;
 
 			this.state.map.areas.map(function (area) {
 				if (!area.preFillColor) return;
-				_this4["draw" + area.shape](_this4.scaleCoords(area.coords), area.preFillColor, area.lineWidth || _this4.props.lineWidth, area.strokeColor || _this4.props.strokeColor);
+				_this3["draw" + area.shape](_this3.scaleCoords(area.coords), area.preFillColor, area.lineWidth || _this3.props.lineWidth, area.strokeColor || _this3.props.strokeColor, _this3.prefillCtx);
 			});
 		}
 	}, {
@@ -1727,35 +1738,43 @@ var ImageMapper = (function (_Component) {
 	}, {
 		key: "renderAreas",
 		value: function renderAreas() {
-			var _this5 = this;
+			var _this4 = this;
 
 			return this.state.map.areas.map(function (area, index) {
-				var scaledCoords = _this5.scaleCoords(area.coords);
-				var center = _this5.computeCenter(area);
+				var scaledCoords = _this4.scaleCoords(area.coords);
+				var center = _this4.computeCenter(area);
 				var extendedArea = _extends({}, area, { scaledCoords: scaledCoords, center: center });
 				return _react2["default"].createElement("area", {
 					key: area._id || index,
 					shape: area.shape,
 					coords: scaledCoords.join(","),
-					onMouseEnter: _this5.hoverOn.bind(_this5, extendedArea, index),
-					onMouseLeave: _this5.hoverOff.bind(_this5, extendedArea, index),
-					onMouseMove: _this5.mouseMove.bind(_this5, extendedArea, index),
-					onMouseDown: _this5.mouseDown.bind(_this5, extendedArea, index),
-					onMouseUp: _this5.mouseUp.bind(_this5, extendedArea, index),
-					onClick: _this5.click.bind(_this5, extendedArea, index),
+					onMouseEnter: _this4.hoverOn.bind(_this4, extendedArea, index),
+					onMouseLeave: _this4.hoverOff.bind(_this4, extendedArea, index),
+					onMouseMove: _this4.mouseMove.bind(_this4, extendedArea, index),
+					onMouseDown: _this4.mouseDown.bind(_this4, extendedArea, index),
+					onMouseUp: _this4.mouseUp.bind(_this4, extendedArea, index),
+					onClick: _this4.click.bind(_this4, extendedArea, index),
 					href: area.href
 				});
 			});
 		}
 	}, {
+		key: "renderChildren",
+		value: function renderChildren() {
+			if (this.props.renderChildren) {
+				return this.props.renderChildren();
+			}
+			return null;
+		}
+	}, {
 		key: "render",
 		value: function render() {
-			var _this6 = this;
+			var _this5 = this;
 
 			return _react2["default"].createElement(
 				"div",
 				{ style: this.styles.container, ref: function (node) {
-						return _this6.container = node;
+						return _this5.container = node;
 					} },
 				_react2["default"].createElement("img", {
 					style: this.styles.img,
@@ -1763,23 +1782,26 @@ var ImageMapper = (function (_Component) {
 					useMap: "#" + this.state.map.name,
 					alt: "",
 					ref: function (node) {
-						return _this6.img = node;
+						return _this5.img = node;
 					},
-					onLoad: this.initCanvas,
+					onLoad: this.initCanvases,
 					onClick: this.imageClick.bind(this),
 					onMouseMove: this.imageMouseMove.bind(this),
 					onMouseDown: this.imageMouseDown.bind(this),
 					onMouseUp: this.imageMouseUp.bind(this)
 				}),
-				_react2["default"].createElement("canvas", { ref: function (node) {
-						return _this6.canvas = node;
-					}, style: this.styles.canvas }),
+				_react2["default"].createElement("canvas", { id: "hover-layer", ref: function (node) {
+						return _this5.hoverCanvas = node;
+					}, style: this.styles.hoverCanvas }),
+				_react2["default"].createElement("canvas", { id: "prefill-layer", ref: function (node) {
+						return _this5.prefillCanvas = node;
+					}, style: this.styles.prefillCanvas }),
 				_react2["default"].createElement(
 					"map",
 					{ name: this.state.map.name, style: this.styles.map },
 					this.renderAreas()
 				),
-				this.props.children
+				this.renderChildren()
 			);
 		}
 	}]);
@@ -1809,7 +1831,7 @@ ImageMapper.propTypes = {
 	src: _propTypes2["default"].string.isRequired,
 	strokeColor: _propTypes2["default"].string,
 	width: _propTypes2["default"].number,
-	children: _propTypes2["default"].node,
+	renderChildren: _propTypes2["default"].func,
 
 	onClick: _propTypes2["default"].func,
 	onMouseMove: _propTypes2["default"].func,

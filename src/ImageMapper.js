@@ -9,13 +9,15 @@ export default class ImageMapper extends Component {
 			"drawrect",
 			"drawcircle",
 			"drawpoly",
-			"initCanvas",
+			"initCanvases",
 			"renderPrefilledAreas"
 		].forEach(f => (this[f] = this[f].bind(this)));
 		let absPos = { position: "absolute", top: 0, left: 0 };
+		let canvas = { ...absPos, pointerEvents: "none" };
 		this.styles = {
 			container: { position: "relative" },
-			canvas: { ...absPos, pointerEvents: "none", zIndex: 2 },
+			hoverCanvas: { ...canvas, zIndex: 3 },
+			prefillCanvas: { ...canvas, zIndex: 2 },
 			img: { ...absPos, zIndex: 1, userSelect: "none" },
 			map: (props.onClick && { cursor: "pointer" }) || undefined
 		};
@@ -28,7 +30,8 @@ export default class ImageMapper extends Component {
 			"lineWidth",
 			"src",
 			"strokeColor",
-			"width"
+			"width",
+			"renderChildren"
 		];
 	}
 
@@ -36,80 +39,86 @@ export default class ImageMapper extends Component {
 		const propChanged = this.watchedProps.some(
 			prop => this.props[prop] !== nextProps[prop]
 		);
-		return !isEqual(this.props.map, this.state.map) || propChanged;
+		const result = !isEqual(this.props.map, this.state.map) || propChanged;
+		return result;
 	}
 
-	componentWillMount() {
+	UNSAFE_componentWillMount() {
 		this.updateCacheMap();
 	}
 
 	updateCacheMap() {
 		this.setState(
-			{ map: JSON.parse(JSON.stringify(this.props.map)) },
-			this.initCanvas
+			{ map: Object.assign({}, this.props.map) },
+			this.initCanvases
 		);
 	}
 
 	componentDidUpdate() {
 		this.updateCacheMap();
-		this.initCanvas();
+		this.initCanvases();
 	}
 
-	drawrect(coords, fillColor, lineWidth, strokeColor) {
+	drawrect(coords, fillColor, lineWidth, strokeColor, context) {
 		let [left, top, right, bot] = coords;
-		this.ctx.fillStyle = fillColor;
-		this.ctx.lineWidth = lineWidth;
-		this.ctx.strokeStyle = strokeColor;
-		this.ctx.strokeRect(left, top, right - left, bot - top);
-		this.ctx.fillRect(left, top, right - left, bot - top);
-		this.ctx.fillStyle = this.props.fillColor;
+		context.fillStyle = fillColor;
+		context.lineWidth = lineWidth;
+		context.strokeStyle = strokeColor;
+		context.strokeRect(left, top, right - left, bot - top);
+		context.fillRect(left, top, right - left, bot - top);
+		context.fillStyle = this.props.fillColor;
 	}
 
-	drawcircle(coords, fillColor, lineWidth, strokeColor) {
-		this.ctx.fillStyle = fillColor;
-		this.ctx.beginPath();
-		this.ctx.lineWidth = lineWidth;
-		this.ctx.strokeStyle = strokeColor;
-		this.ctx.arc(coords[0], coords[1], coords[2], 0, 2 * Math.PI);
-		this.ctx.closePath();
-		this.ctx.stroke();
-		this.ctx.fill();
-		this.ctx.fillStyle = this.props.fillColor;
+	drawcircle(coords, fillColor, lineWidth, strokeColor, context) {
+		context.fillStyle = fillColor;
+		context.beginPath();
+		context.lineWidth = lineWidth;
+		context.strokeStyle = strokeColor;
+		context.arc(coords[0], coords[1], coords[2], 0, 2 * Math.PI);
+		context.closePath();
+		context.stroke();
+		context.fill();
+		context.fillStyle = this.props.fillColor;
 	}
 
-	drawpoly(coords, fillColor, lineWidth, strokeColor) {
+	drawpoly(coords, fillColor, lineWidth, strokeColor, context) {
+		coords = coords.map(coord => Math.floor(coord));
 		coords = coords.reduce(
 			(a, v, i, s) => (i % 2 ? a : [...a, s.slice(i, i + 2)]),
 			[]
 		);
 		
-		this.ctx.fillStyle = fillColor;
-		this.ctx.beginPath();
-		this.ctx.lineWidth = lineWidth;
-		this.ctx.strokeStyle = strokeColor;
+		context.fillStyle = fillColor;
+		context.beginPath();
+		context.lineWidth = lineWidth;
+		context.strokeStyle = strokeColor;
 		let first = coords.unshift();
-		this.ctx.moveTo(first[0], first[1]);
-		coords.forEach(c => this.ctx.lineTo(c[0], c[1]));
-		this.ctx.closePath();
-		this.ctx.stroke();
-		this.ctx.fill();
-		this.ctx.fillStyle = this.props.fillColor;
+		context.moveTo(first[0], first[1]);
+		coords.forEach(c => context.lineTo(c[0], c[1]));
+		context.closePath();
+		context.stroke();
+		context.fill();
+		context.fillStyle = this.props.fillColor;
 	}
 
-	initCanvas() {
+	initCanvases() {
 		if (this.props.width) this.img.width = this.props.width;
 
 		if (this.props.height) this.img.height = this.props.height;
 
-		this.canvas.width = this.props.width || this.img.clientWidth;
-		this.canvas.height = this.props.height || this.img.clientHeight;
+		this.prefillCanvas.width = this.props.width || this.img.clientWidth;
+		this.prefillCanvas.height = this.props.height || this.img.clientHeight;
+		this.hoverCanvas.width = this.props.width || this.img.clientWidth;
+		this.hoverCanvas.height = this.props.height || this.img.clientHeight;
 		this.container.style.width =
 			(this.props.width || this.img.clientWidth) + "px";
 		this.container.style.height =
 			(this.props.height || this.img.clientHeight) + "px";
-		this.ctx = this.canvas.getContext("2d");
-		this.ctx.fillStyle = this.props.fillColor;
-		//this.ctx.strokeStyle = this.props.strokeColor;
+		this.prefillCtx = this.prefillCanvas.getContext("2d");
+		this.prefillCtx.fillStyle = this.props.fillColor;
+		this.hoverCtx = this.hoverCanvas.getContext("2d");
+		this.hoverCtx.fillStyle = this.props.fillColor;
+		//this.prefillCtx.strokeStyle = this.props.strokeColor;
 
 		if (this.props.onLoad) this.props.onLoad();
 
@@ -124,17 +133,16 @@ export default class ImageMapper extends Component {
 				event.target.getAttribute("coords").split(","),
 				area.fillColor,
 				area.lineWidth || this.props.lineWidth,
-				area.strokeColor || this.props.strokeColor
+				area.strokeColor || this.props.strokeColor,
+				this.hoverCtx
 			);
 		}
+		
 		if (this.props.onMouseEnter) this.props.onMouseEnter(area, index, event);
 	}
 
 	hoverOff(area, index, event) {
-		if (this.props.active) {
-			this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-			this.renderPrefilledAreas();
-		}
+		if (this.props.active) this.hoverCtx.clearRect(0, 0, this.hoverCanvas.width, this.hoverCanvas.height);
 
 		if (this.props.onMouseLeave) this.props.onMouseLeave(area, index, event);
 	}
@@ -203,7 +211,8 @@ export default class ImageMapper extends Component {
 				this.scaleCoords(area.coords),
 				area.preFillColor,
 				area.lineWidth || this.props.lineWidth,
-				area.strokeColor || this.props.strokeColor
+				area.strokeColor || this.props.strokeColor,
+				this.prefillCtx
 			);
 		});
 	}
@@ -253,6 +262,13 @@ export default class ImageMapper extends Component {
 			);
 		});
 	}
+	
+	renderChildren() {
+		if (this.props.renderChildren) {
+			return this.props.renderChildren();
+		}
+		return null;
+	};
 
 	render() {
 		return (
@@ -263,17 +279,18 @@ export default class ImageMapper extends Component {
 					useMap={`#${this.state.map.name}`}
 					alt=""
 					ref={node => (this.img = node)}
-					onLoad={this.initCanvas}
+					onLoad={this.initCanvases}
 					onClick={this.imageClick.bind(this)}
 					onMouseMove={this.imageMouseMove.bind(this)}
 					onMouseDown={this.imageMouseDown.bind(this)}
 					onMouseUp={this.imageMouseUp.bind(this)}
 				/>
-				<canvas ref={node => (this.canvas = node)} style={this.styles.canvas} />
+				<canvas id="hover-layer" ref={node => (this.hoverCanvas = node)} style={this.styles.hoverCanvas} />
+				<canvas id="prefill-layer" ref={node => (this.prefillCanvas = node)} style={this.styles.prefillCanvas} />
 				<map name={this.state.map.name} style={this.styles.map}>
 					{this.renderAreas()}
 				</map>
-				{this.props.children}
+				{this.renderChildren()}
 			</div>
 		);
 	}
@@ -299,7 +316,7 @@ ImageMapper.propTypes = {
 	src: PropTypes.string.isRequired,
 	strokeColor: PropTypes.string,
 	width: PropTypes.number,
-	children: PropTypes.node,
+	renderChildren: PropTypes.func,
 
 	onClick: PropTypes.func,
 	onMouseMove: PropTypes.func,

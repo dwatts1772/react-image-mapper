@@ -54,32 +54,42 @@ var MAP = {
 
 var URL = "https://c1.staticflickr.com/5/4052/4503898393_303cfbc9fd_b.jpg";
 
-var App = React.createClass({
-	getInitialState() {
-		return { hoveredArea: null, msg: null, moveMsg: null };
-	},
+class App extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			hoveredArea: null,
+			msg: null,
+			moveMsg: null
+		};
+	};
+	
 	load() {
 		this.setState({ msg: "Interact with image !" });
-	},
+	};
+	
 	clicked(area) {
 		this.setState({
 			msg: `You clicked on ${area.shape} at coords ${JSON.stringify(
 				area.coords
 			)} !`
 		});
-	},
+	};
+	
 	clickedOutside(evt) {
 		const coords = { x: evt.nativeEvent.layerX, y: evt.nativeEvent.layerY };
 		this.setState({
 			msg: `You clicked on the image at coords ${JSON.stringify(coords)} !`
 		});
-	},
+	};
+	
 	moveOnImage(evt) {
 		const coords = { x: evt.nativeEvent.layerX, y: evt.nativeEvent.layerY };
 		this.setState({
 			moveMsg: `You moved on the image at coords ${JSON.stringify(coords)} !`
 		});
-	},
+	};
+	
 	enterArea(area) {
 		this.setState({
 			hoveredArea: area,
@@ -87,7 +97,8 @@ var App = React.createClass({
 				area.coords
 			)} !`
 		});
-	},
+	};
+	
 	leaveArea(area) {
 		this.setState({
 			hoveredArea: null,
@@ -95,7 +106,8 @@ var App = React.createClass({
 				area.coords
 			)} !`
 		});
-	},
+	};
+	
 	moveOnArea(area, evt) {
 		const coords = { x: evt.nativeEvent.layerX, y: evt.nativeEvent.layerY };
 		this.setState({
@@ -103,11 +115,11 @@ var App = React.createClass({
 				area.name
 			} at coords ${JSON.stringify(coords)} !`
 		});
-	},
+	};
 
 	getTipPosition(area) {
 		return { top: `${area.center[1]}px`, left: `${area.center[0]}px` };
-	},
+	};
 
 	render() {
 		return (
@@ -240,6 +252,6 @@ var App = React.createClass({
 			</div>
 		);
 	}
-});
+}
 
 ReactDOM.render(<App />, document.getElementById("app"));
