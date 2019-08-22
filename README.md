@@ -54,6 +54,7 @@ import ImageMapper from 'react-image-mapper';
 |**height**|*number*|Image height|`Displayed height`|
 |**active**|*bool*|Enable/Disable highlighting|`true`|
 |**imgWidth**|*number*|Original image width|`null`|
+|**children**|*node*|Child nodes to be rendered inside the container (after the image, the canvas and the map)|`null`|
 
 |Props callbacks|Called on|signature|
 |---|---|---|
@@ -61,9 +62,13 @@ import ImageMapper from 'react-image-mapper';
 |**onMouseEnter**|Hovering a zone in image|`(area: obj, index: num, event): void`|
 |**onMouseLeave**|Leaving a zone in image|`(area: obj, index: num, event): void`|
 |**onMouseMove**|Moving mouse on a zone in image|`(area: obj, index: num, event): void`|
+|**onMouseDown**|Pressing a mouse button on a zone in image|`(area: obj, index: num, event): void`|
+|**onMouseUp**|Releasing a mouse button while the pointer is located in a zone in the image|`(area: obj, index: num, event): void`|
 |**onClick**|Click on a zone in image|`(area: obj, index: num, event): void`|
 |**onImageClick**|Click outside of a zone in image|`(event): void`|
 |**onImageMouseMove**|Moving mouse on the image itself|`(event): void`|
+|**onImageMouseDown**|Pressing a mouse button on the image itself|`(event): void`|
+|**onImageMouseUp**|Releasing a mouse button while the pointer is located in the image itself|`(event): void`|
 
 Map is an object describing highlighted areas in the image.
 
