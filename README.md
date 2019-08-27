@@ -59,6 +59,7 @@ import ImageMapper from 'react-image-mapper';
 |Props callbacks|Called on|signature|
 |---|---|---|
 |**onLoad**|Image loading and canvas initialization completed|`(): void`|
+|**onExtendedAreasCreated**|The extended areas (with `scaledCoords` etc., see below) have been created|`(extendedAreas: obj[]): void`|
 |**onMouseEnter**|Hovering a zone in image|`(area: obj, index: num, event): void`|
 |**onMouseLeave**|Leaving a zone in image|`(area: obj, index: num, event): void`|
 |**onMouseMove**|Moving mouse on a zone in image|`(area: obj, index: num, event): void`|

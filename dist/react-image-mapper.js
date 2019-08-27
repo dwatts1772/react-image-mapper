@@ -1525,6 +1525,9 @@ var ImageMapper = (function (_Component) {
 			}
 			this.updateCacheMap();
 			this.initCanvases();
+			if (this.props.onExtendedAreasCreated) {
+				this.props.onExtendedAreasCreated(this.getExtendedAreas());
+			}
 		}
 	}, {
 		key: 'initCanvases',
@@ -1675,6 +1678,17 @@ var ImageMapper = (function (_Component) {
 			}
 		}
 	}, {
+		key: 'getExtendedAreas',
+		value: function getExtendedAreas() {
+			var _this3 = this;
+
+			return this.state.map.areas.map(function (area) {
+				var scaledCoords = _this3.scaleCoords(area.coords);
+				var center = _this3.computeCenter(area);
+				return _extends({}, area, { scaledCoords: scaledCoords, center: center });
+			});
+		}
+	}, {
 		key: 'getMatchingSvgElementForShape',
 		value: function getMatchingSvgElementForShape(shape, coords, props) {
 			var scaledCoords = this.scaleCoords(coords);
@@ -1714,38 +1728,35 @@ var ImageMapper = (function (_Component) {
 	}, {
 		key: 'renderPrefillSvgElements',
 		value: function renderPrefillSvgElements() {
-			var _this3 = this;
+			var _this4 = this;
 
 			return this.state.map.areas.map(function (area, index) {
 				if (!area.preFillColor) return null;
-				return _this3.getMatchingSvgElementForShape(area.shape, area.coords, {
+				return _this4.getMatchingSvgElementForShape(area.shape, area.coords, {
 					key: area._id || index,
 					fill: area.preFillColor || 'transparent',
-					stroke: area.strokeColor || _this3.props.strokeColor,
-					strokeWidth: area.lineWidth || _this3.props.lineWidth
+					stroke: area.strokeColor || _this4.props.strokeColor,
+					strokeWidth: area.lineWidth || _this4.props.lineWidth
 				});
 			});
 		}
 	}, {
 		key: 'renderAreas',
 		value: function renderAreas() {
-			var _this4 = this;
+			var _this5 = this;
 
-			return this.state.map.areas.map(function (area, index) {
-				var scaledCoords = _this4.scaleCoords(area.coords);
-				var center = _this4.computeCenter(area);
-				var extendedArea = _extends({}, area, { scaledCoords: scaledCoords, center: center });
+			return this.getExtendedAreas().map(function (extendedArea, index) {
 				return _react2['default'].createElement('area', {
-					key: area._id || index,
-					shape: area.shape,
-					coords: scaledCoords.join(','),
-					onMouseEnter: _this4.hoverOn.bind(_this4, extendedArea, index),
-					onMouseLeave: _this4.hoverOff.bind(_this4, extendedArea, index),
-					onMouseMove: _this4.mouseMove.bind(_this4, extendedArea, index),
-					onMouseDown: _this4.mouseDown.bind(_this4, extendedArea, index),
-					onMouseUp: _this4.mouseUp.bind(_this4, extendedArea, index),
-					onClick: _this4.click.bind(_this4, extendedArea, index),
-					href: area.href
+					key: extendedArea._id || index,
+					shape: extendedArea.shape,
+					coords: extendedArea.scaledCoords.join(','),
+					onMouseEnter: _this5.hoverOn.bind(_this5, extendedArea, index),
+					onMouseLeave: _this5.hoverOff.bind(_this5, extendedArea, index),
+					onMouseMove: _this5.mouseMove.bind(_this5, extendedArea, index),
+					onMouseDown: _this5.mouseDown.bind(_this5, extendedArea, index),
+					onMouseUp: _this5.mouseUp.bind(_this5, extendedArea, index),
+					onClick: _this5.click.bind(_this5, extendedArea, index),
+					href: extendedArea.href
 				});
 			});
 		}
@@ -1760,12 +1771,12 @@ var ImageMapper = (function (_Component) {
 	}, {
 		key: 'render',
 		value: function render() {
-			var _this5 = this;
+			var _this6 = this;
 
 			return _react2['default'].createElement(
 				'div',
 				{ style: this.styles.container, ref: function (node) {
-						return _this5.container = node;
+						return _this6.container = node;
 					} },
 				_react2['default'].createElement('img', {
 					style: this.styles.img,
@@ -1773,7 +1784,7 @@ var ImageMapper = (function (_Component) {
 					useMap: '#' + this.state.map.name,
 					alt: '',
 					ref: function (node) {
-						return _this5.img = node;
+						return _this6.img = node;
 					},
 					onLoad: this.initCanvases,
 					onClick: this.imageClick.bind(this),
@@ -1784,14 +1795,14 @@ var ImageMapper = (function (_Component) {
 				_react2['default'].createElement(
 					'svg',
 					{ id: 'prefill-layer', ref: function (node) {
-							return _this5.prefillSvg = node;
+							return _this6.prefillSvg = node;
 						}, style: this.styles.prefillCanvas },
 					this.renderPrefillSvgElements()
 				),
 				_react2['default'].createElement(
 					'svg',
 					{ id: 'hover-layer', ref: function (node) {
-							return _this5.hoverSvg = node;
+							return _this6.hoverSvg = node;
 						}, style: this.styles.hoverCanvas },
 					this.state.currentlyHoveredArea && this.renderCurrentlyHoveredSvgElement()
 				),
@@ -1841,6 +1852,7 @@ ImageMapper.propTypes = {
 	onImageMouseDown: _propTypes2['default'].func,
 	onImageMouseUp: _propTypes2['default'].func,
 	onLoad: _propTypes2['default'].func,
+	onExtendedAreasCreated: _propTypes2['default'].func,
 	onMouseEnter: _propTypes2['default'].func,
 	onMouseLeave: _propTypes2['default'].func,
 

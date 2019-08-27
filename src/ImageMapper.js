@@ -59,6 +59,9 @@ export default class ImageMapper extends Component {
 		}
 		this.updateCacheMap();
 		this.initCanvases();
+		if (this.props.onExtendedAreasCreated) {
+			this.props.onExtendedAreasCreated(this.getExtendedAreas());
+		}
 	}
 
 	initCanvases() {
@@ -181,6 +184,14 @@ export default class ImageMapper extends Component {
 		}
 	}
 	
+	getExtendedAreas() {
+		return this.state.map.areas.map((area) => {
+			const scaledCoords = this.scaleCoords(area.coords);
+			const center = this.computeCenter(area);
+			return { ...area, scaledCoords, center };
+		});
+	}
+	
 	getMatchingSvgElementForShape(shape, coords, props) {
 		const scaledCoords = this.scaleCoords(coords);
 		switch (shape) {
@@ -238,22 +249,19 @@ export default class ImageMapper extends Component {
 	}
 
 	renderAreas() {
-		return this.state.map.areas.map((area, index) => {
-			const scaledCoords = this.scaleCoords(area.coords);
-			const center = this.computeCenter(area);
-			const extendedArea = { ...area, scaledCoords, center };
+		return this.getExtendedAreas().map((extendedArea, index) => {
 			return (
 				<area
-					key={area._id || index}
-					shape={area.shape}
-					coords={scaledCoords.join(',')}
+					key={extendedArea._id || index}
+					shape={extendedArea.shape}
+					coords={extendedArea.scaledCoords.join(',')}
 					onMouseEnter={this.hoverOn.bind(this, extendedArea, index)}
 					onMouseLeave={this.hoverOff.bind(this, extendedArea, index)}
 					onMouseMove={this.mouseMove.bind(this, extendedArea, index)}
 					onMouseDown={this.mouseDown.bind(this, extendedArea, index)}
 					onMouseUp={this.mouseUp.bind(this, extendedArea, index)}
 					onClick={this.click.bind(this, extendedArea, index)}
-					href={area.href}
+					href={extendedArea.href}
 				/>
 			);
 		});
@@ -327,6 +335,7 @@ ImageMapper.propTypes = {
 	onImageMouseDown: PropTypes.func,
 	onImageMouseUp: PropTypes.func,
 	onLoad: PropTypes.func,
+	onExtendedAreasCreated: PropTypes.func,
 	onMouseEnter: PropTypes.func,
 	onMouseLeave: PropTypes.func,
 
