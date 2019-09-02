@@ -19,6 +19,7 @@ export default class ImageMapper extends Component {
 		};
 		// Props watched for changes to trigger update
 		this.watchedProps = [
+			'map',
 			'active',
 			'fillColor',
 			'height',
